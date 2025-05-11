@@ -1,20 +1,14 @@
 import { GObject } from "astal";
-import { astalify, ConstructProps, Gtk } from "astal/gtk3";
+import { astalify, ConstructProps, Gtk } from "astal/gtk4";
 
-class Calendar extends astalify(Gtk.Calendar) {
-  static {
-    GObject.registerClass(this);
-  }
+// Use astalify to create a type-safe Calendar component
+const CalendarWidget = astalify<Gtk.Calendar, Gtk.Calendar.ConstructorProps>(Gtk.Calendar);
 
-  constructor(
-    props: ConstructProps<Gtk.Calendar, Gtk.Calendar.ConstructorProps>
-  ) {
-    super(props as any);
-  }
-}
-
+// Export a wrapper function that returns a Calendar widget
 export default () => {
   return (
-    <box className={"calendar"} child={new Calendar({ hexpand: true })}></box>
+    <box cssName={"calendar"} vexpand={true} hexpand={true}>
+      <CalendarWidget hexpand={true} vexpand={true} />
+    </box>
   );
 };

@@ -14,7 +14,7 @@ const battery = Battery.get_default();
 
 import Tray from "gi://AstalTray";
 import ToggleButton from "../../toggleButton";
-import { Gtk } from "astal/gtk3";
+import { Gtk } from "astal/gtk4";
 import { barLock, barOrientation, DND, globalTheme } from "../../../variables";
 import { notify } from "../../../utils/notification";
 import { switchGlobalTheme } from "../../../utils/theme";
@@ -23,8 +23,8 @@ function Theme() {
   return (
     <ToggleButton
       onToggled={(self, on) => switchGlobalTheme()}
-      label={bind(globalTheme).as((theme) => (theme ? "" : ""))}
-      className="theme icon"
+      label={bind(globalTheme).as((theme) => (theme ? "" : ""))}
+      cssClass="theme icon"
     />
   );
 }
@@ -119,19 +119,19 @@ function BatteryWidget() {
             case isCharging:
               return "⚡";
             case p > 85:
-              return "";
+              return "";
             case p > 75:
-              return "";
+              return "";
             case p > 50:
-              return "";
+              return "";
             case p > 25:
-              return "";
+              return "";
             case p > 10:
-              return "";
+              return "";
             case p > 0:
-              return "";
+              return "";
             default:
-              return "";
+              return "";
           }
         })
       )}
@@ -188,10 +188,10 @@ function PinBar() {
       state={barLock.get()}
       onToggled={(self, on) => {
         barLock.set(on);
-        self.label = on ? "" : "";
+        self.label = on ? "" : "";
       }}
-      className="panel-lock icon"
-      label={barLock.get() ? "" : ""}
+      cssClass="panel-lock icon"
+      label={barLock.get() ? "" : ""}
     />
   );
 }
@@ -201,10 +201,10 @@ function DndToggle() {
     state: DND.get(),
     onToggled: (self, on) => {
       DND.set(on);
-      self.label = DND.get() ? "" : "";
+      self.label = DND.get() ? "" : "";
     },
-    className: "dnd-toggle icon",
-    label: DND.get() ? "" : "",
+    cssClass: "dnd-toggle icon",
+    label: DND.get() ? "" : "",
   });
 }
 
@@ -214,7 +214,7 @@ function BarOrientation() {
       onClicked={() => barOrientation.set(!barOrientation.get())}
       className="bar-orientation icon"
       label={bind(barOrientation).as((orientation) =>
-        orientation ? "" : ""
+        orientation ? "" : ""
       )}
     />
   );

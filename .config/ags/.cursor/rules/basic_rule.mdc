@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+- Always check finish jobs on the phase plan
+- Always update project status to changelog (remember to clean the files instead of keeping unnecessary details)- 
+- When all boxes checked, return a message to confirm status

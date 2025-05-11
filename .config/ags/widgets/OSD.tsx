@@ -1,4 +1,4 @@
-import { Astal, Gdk, Gtk } from "astal/gtk3";
+import { Astal, Gdk, Gtk } from "astal/gtk4";
 import Brightness from "../services/brightness";
 const brightness = Brightness.get_default();
 import Wp from "gi://AstalWp";

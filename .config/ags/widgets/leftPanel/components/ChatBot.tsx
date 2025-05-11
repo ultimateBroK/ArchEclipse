@@ -1,4 +1,4 @@
-import { Gtk } from "astal/gtk3";
+import { Gtk } from "astal/gtk4";
 import { Message } from "../../../interfaces/chatbot.interface";
 import { bind, execAsync, timeout, Variable } from "astal";
 import { notify } from "../../../utils/notification";
@@ -46,7 +46,7 @@ const formatTextWithCodeBlocks = (text: string) => {
             halign={Gtk.Align.END}
             valign={Gtk.Align.START}
             className="copy"
-            label=""
+            label=""
             onClick={() => execAsync(`wl-copy "${part}"`).catch(print)}
           />
         </box>
@@ -125,7 +125,7 @@ const ApiList = () => (
       <ToggleButton
         hexpand
         state={bind(chatBotApi).as((p) => p.name === provider.name)}
-        className="provider"
+        cssClass="provider"
         label={provider.name}
         onToggled={() => chatBotApi.set(provider)}
       />
@@ -274,8 +274,8 @@ const ImageGenerationSwitch = () => (
   <ToggleButton
     visible={bind(chatBotApi).as((api) => api.imageGenerationSupport)}
     state={chatBotImageGeneration.get()}
-    className="image-generation"
-    label={" Image Generation"}
+    cssClass="image-generation"
+    label={" Image Generation"}
     onToggled={(self, on) => chatBotImageGeneration.set(on)}
   />
 );

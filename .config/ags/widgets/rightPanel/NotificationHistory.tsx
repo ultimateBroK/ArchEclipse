@@ -1,4 +1,4 @@
-import { Gtk } from "astal/gtk3";
+import { Gtk } from "astal/gtk4";
 import Notifd from "gi://AstalNotifd";
 import Notification from "./components/Notification";
 import { bind, Variable } from "astal";

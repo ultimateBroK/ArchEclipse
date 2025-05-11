@@ -1,4 +1,4 @@
-import { App, Astal, Gdk, Gtk, Widget } from "astal/gtk3";
+import { App, Astal, Gdk, Gtk, Widget } from "astal/gtk4";
 import hyprland from "gi://AstalHyprland";
 import {
   barLayout,
@@ -17,6 +17,7 @@ import { hideWindow } from "../utils/window";
 import { getMonitorName } from "../utils/monitor";
 import ToggleButton from "./toggleButton";
 import { barWidgetSelectors } from "../constants/widget.constants";
+import { Align } from "../utils/gtk4-compat";
 const Hyprland = hyprland.get_default();
 
 const hyprCustomDir: string = "$HOME/.config/hypr/configs/custom/";
@@ -71,7 +72,7 @@ const setBarLayout = () => {
 };
 
 const agsSetting = (setting: Variable<AGSSetting>) => {
-  const title = <label halign={Gtk.Align.START} label={setting.get().name} />;
+  const title = <label halign={Align.START} label={setting.get().name} />;
 
   const sliderWidget = () => {
     const infoLabel = (
@@ -90,7 +91,7 @@ const agsSetting = (setting: Variable<AGSSetting>) => {
 
     const Slider = (
       <slider
-        halign={Gtk.Align.END}
+        halign={Align.END}
         step={1}
         width_request={169}
         className="slider"
@@ -110,7 +111,7 @@ const agsSetting = (setting: Variable<AGSSetting>) => {
     );
 
     return (
-      <box hexpand={true} halign={Gtk.Align.END} spacing={5}>
+      <box hexpand={true} halign={Align.END} spacing={5}>
         {Slider}
         {infoLabel}
       </box>
@@ -143,7 +144,7 @@ const agsSetting = (setting: Variable<AGSSetting>) => {
     );
 
     return (
-      <box hexpand={true} halign={Gtk.Align.END} spacing={5}>
+      <box hexpand={true} halign={Align.END} spacing={5}>
         {Switch}
         {infoLabel}
       </box>
@@ -165,7 +166,7 @@ const hyprlandSetting = (keys: string, setting: HyprlandSetting) => {
 
   const title = (
     <label
-      halign={Gtk.Align.START}
+      halign={Align.START}
       label={lastKey.charAt(0).toUpperCase() + lastKey.slice(1)}
     />
   );
@@ -205,7 +206,7 @@ const hyprlandSetting = (keys: string, setting: HyprlandSetting) => {
 
     const Slider = (
       <slider
-        halign={Gtk.Align.END}
+        halign={Align.END}
         step={0.01}
         width_request={169}
         className="slider"
@@ -217,7 +218,7 @@ const hyprlandSetting = (keys: string, setting: HyprlandSetting) => {
     );
 
     return (
-      <box hexpand={true} halign={Gtk.Align.END} spacing={5}>
+      <box hexpand={true} halign={Align.END} spacing={5}>
         {Slider}
         {infoLabel}
       </box>
@@ -252,7 +253,7 @@ const hyprlandSetting = (keys: string, setting: HyprlandSetting) => {
     );
 
     return (
-      <box hexpand={true} halign={Gtk.Align.END} spacing={5}>
+      <box hexpand={true} halign={Align.END} spacing={5}>
         {Switch}
         {infoLabel}
       </box>

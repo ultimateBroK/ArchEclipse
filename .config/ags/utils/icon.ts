@@ -1,4 +1,4 @@
-import { Astal } from "astal/gtk3"
+import { Astal, Gtk, Gdk } from "astal/gtk4"
 
 export function playerToIcon(name: string)
 {
@@ -18,11 +18,16 @@ export function playerToIcon(name: string)
     return icons[name] || ""
 }
 
-
-
-export const lookupIcon = (name: string) =>
+export const lookupIcon = (name: string): string =>
 {
-    let result = Astal.Icon.lookup_icon(name) ? Astal.Icon.lookup_icon(name) : "audio-x-generic-symbolic"
-    return result
+    const display = Gdk.Display.get_default();
+    if (!display) {
+        return "audio-x-generic-symbolic"; // Cannot get display, return fallback
+    }
+    const iconTheme = Gtk.IconTheme.get_for_display(display);
+    if (iconTheme.has_icon(name)) {
+        return name;
+    }
+    return "audio-x-generic-symbolic";
 }
 

@@ -1,5 +1,5 @@
 import { bind, Variable } from "astal";
-import { App, Astal, Gdk } from "astal/gtk3";
+import { App, Astal, Gdk } from "astal/gtk4";
 import { asyncSleep } from "../utils/time";
 
 const INTERVAL = 10;

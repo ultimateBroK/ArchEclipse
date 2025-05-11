@@ -1,5 +1,5 @@
 import { execAsync, GLib, timeout, Variable } from "astal";
-import { Gtk, Astal } from "astal/gtk3";
+import { Gtk, Astal } from "astal/gtk4";
 import Notifd from "gi://AstalNotifd";
 import { globalTransition, NOTIFICATION_DELAY } from "../../../variables";
 import ToggleButton from "../../toggleButton";

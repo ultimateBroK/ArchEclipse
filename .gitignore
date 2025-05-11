@@ -39,3 +39,5 @@
 
 # include zsh config
 !.zshrc
+
+/.cursor/

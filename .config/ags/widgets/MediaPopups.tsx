@@ -1,17 +1,17 @@
 import { bind } from "astal";
 import Player from "./Player";
 
-import Mpris from "gi://AstalMpris";
-import { App, Astal, Gdk } from "astal/gtk3";
+import AstalMpris from "gi://AstalMpris?version=0.1";
+import { App, Astal, Gdk } from "astal/gtk4";
 import { barOrientation, globalMargin } from "../variables";
 import { hideWindow } from "../utils/window";
 import { getMonitorName } from "../utils/monitor";
 
-const mpris = Mpris.get_default();
+const mpris = AstalMpris.get_default();
 const players = bind(mpris, "players");
 
 export default (monitor: Gdk.Monitor) => {
-  const monitorName = getMonitorName(monitor.get_display(), monitor);
+  const monitorName = getMonitorName(monitor);
   return (
     <window
       gdkmonitor={monitor}
@@ -27,17 +27,16 @@ export default (monitor: Gdk.Monitor) => {
         <box
           className="media-popup"
           child={
-            <eventbox
-              onHoverLost={() => hideWindow(`media-${monitorName}`)}
+            <box
               child={
                 <box vertical={true} spacing={10}>
-                  {players.as((p) =>
-                    p.map((player) => (
+                  {players.as((p: AstalMpris.Player[]) =>
+                    p.map((player: AstalMpris.Player) => (
                       <Player player={player} playerType="popup" />
                     ))
                   )}
                 </box>
-              }></eventbox>
+              }></box>
           }></box>
       }></window>
   );

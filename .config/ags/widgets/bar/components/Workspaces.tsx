@@ -1,4 +1,4 @@
-import { Gtk } from "astal/gtk3";
+import { Gtk } from "astal/gtk4";
 import {
   focusedWorkspace,
   globalTransition,
@@ -50,7 +50,7 @@ function Workspaces() {
 
     return (
       <button
-        className={buttonClass}
+        cssName={buttonClass}
         label={icon}
         onClicked={() =>
           Hyprland.message_async(`dispatch workspace ${id}`, () => {})
@@ -91,7 +91,7 @@ function Workspaces() {
         if (currentGroup.length > 0) {
           groupElements.push(
             <box
-              className={`workspace-group ${
+              cssName={`workspace-group ${
                 currentGroupIsActive ? "active" : "inactive"
               }`}>
               {currentGroup}
@@ -134,7 +134,7 @@ function Workspaces() {
           // Add inactive workspace as single-element group
           groupElements.push(
             <box
-              className="workspace-group inactive"
+              cssName="workspace-group inactive"
               child={createWorkspaceButton(id, isActive, isFocused, icon)}
             />
           );
@@ -147,11 +147,11 @@ function Workspaces() {
   );
 
   // Render the workspaces container with bound workspace elements
-  return <box className="workspaces">{bind(workspaces)}</box>;
+  return <box cssName="workspaces">{bind(workspaces)}</box>;
 }
 const Special = () => (
   <button
-    className="special"
+    cssName="special"
     label={workspaceToIcon[0]}
     onClicked={() =>
       Hyprland.message_async(`dispatch togglespecialworkspace`, (res) => {})
@@ -162,7 +162,7 @@ const Special = () => (
 function OverView() {
   return (
     <button
-      className="overview"
+      cssName="overview"
       label="󱗼"
       onClicked={() =>
         Hyprland.message_async("dispatch hyprexpo:expo toggle", (res) => {})
@@ -174,7 +174,7 @@ function OverView() {
 function AppLauncher({ monitorName }: { monitorName: string }) {
   return (
     <ToggleButton
-      className="app-search"
+      cssName="app-search"
       label=""
       onToggled={(self, on) => {
         on
@@ -188,7 +188,7 @@ function AppLauncher({ monitorName }: { monitorName: string }) {
 function Settings({ monitorName }: { monitorName: string }) {
   return (
     <ToggleButton
-      className="settings"
+      cssName="settings"
       label=""
       onToggled={(self, on) =>
         on
@@ -202,7 +202,7 @@ function Settings({ monitorName }: { monitorName: string }) {
 function UserPanel({ monitorName }: { monitorName: string }) {
   return (
     <ToggleButton
-      className="user-panel"
+      cssName="user-panel"
       label=""
       onToggled={(self, on) => {
         on
@@ -215,7 +215,7 @@ function UserPanel({ monitorName }: { monitorName: string }) {
 
 const Actions = ({ monitorName }: { monitorName: string }) => {
   return (
-    <box className="actions">
+    <box cssName="actions">
       <UserPanel monitorName={monitorName} />
       <Settings monitorName={monitorName} />
       <AppLauncher monitorName={monitorName} />
@@ -231,7 +231,7 @@ export default ({
   halign: Gtk.Align;
 }) => {
   return (
-    <box className="bar-left" spacing={5} halign={halign} hexpand>
+    <box cssName="bar-left" spacing={5} halign={halign} hexpand>
       <Actions monitorName={monitorName} />
       <OverView />
       <Special />

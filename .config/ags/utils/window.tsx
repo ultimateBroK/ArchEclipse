@@ -1,5 +1,5 @@
 import { Variable } from "astal";
-import { App, Gtk } from "astal/gtk3";
+import { App, Gtk } from "astal/gtk4";
 import ToggleButton from "../widgets/toggleButton";
 
 export function hideWindow(window_name: string) {
@@ -25,14 +25,14 @@ export function WindowActions({
   const minRightPanelWidth = 250;
   return (
     <box
-      className={"window-actions"}
+      cssName={"window-actions"}
       vexpand={true}
       halign={Gtk.Align.END}
       valign={Gtk.Align.END}
       vertical={true}>
       <button
-        label={""}
-        className={"expand-window"}
+        label={""}
+        cssName={"expand-window"}
         onClicked={() => {
           windowWidth.set(
             windowWidth.get() < maxRightPanelWidth
@@ -42,8 +42,8 @@ export function WindowActions({
         }}
       />
       <button
-        label={""}
-        className={"shrink-window"}
+        label={""}
+        cssName={"shrink-window"}
         onClicked={() => {
           windowWidth.set(
             windowWidth.get() > minRightPanelWidth
@@ -53,25 +53,25 @@ export function WindowActions({
         }}
       />
       <ToggleButton
-        label={""}
-        className={"exclusivity"}
+        label={""}
+        cssClass={"exclusivity"}
         state={!windowExclusivity.get()}
         onToggled={(self, on) => {
           windowExclusivity.set(!on);
         }}
       />
       <ToggleButton
-        label={windowLock.get() ? "" : ""}
-        className={"lock"}
+        label={windowLock.get() ? "" : ""}
+        cssClass={"lock"}
         state={windowLock.get()}
         onToggled={(self, on) => {
           windowLock.set(on);
-          self.label = on ? "" : "";
+          self.label = on ? "" : "";
         }}
       />
       <button
-        label={""}
-        className={"close"}
+        label={""}
+        cssName={"close"}
         onClicked={() => {
           windowVisibility.set(false);
         }}
