@@ -9,7 +9,6 @@ import { bind, Binding, GLib, Variable } from "astal";
 import { writeJSONFile } from "./utils/json";
 import { AGSSetting, Settings } from "./interfaces/settings.interface";
 import { Api } from "./interfaces/api.interface";
-import { Waifu } from "./interfaces/waifu.interface";
 import { getGlobalTheme } from "./utils/theme";
 
 export const NOTIFICATION_DELAY = 5000
@@ -70,10 +69,7 @@ barOrientation.subscribe((value) => setSetting("bar.orientation", value));
 export const barLayout = Variable<WidgetSelector[]>(getSetting("bar.layout"));
 barLayout.subscribe((value) => setSetting("bar.layout", value));
 
-export const waifuApi = Variable<Api>(getSetting("waifu.api"));
-waifuApi.subscribe((value) => setSetting("waifu.api", value));
-export const waifuCurrent = Variable<Waifu>(getSetting("waifu.current"));
-waifuCurrent.subscribe((value) => setSetting("waifu.current", value));
+
 
 export const focusedClient: Binding<Hyprland.Client> = bind(hyprland, "focusedClient");
 export const emptyWorkspace: Binding<boolean> = focusedClient.as((client) => !client);
@@ -114,13 +110,6 @@ chatBotApi.subscribe((value) => setSetting("chatBot.api", value));
 export const chatBotImageGeneration = Variable<boolean>(getSetting("chatBot.imageGeneration"));
 chatBotImageGeneration.subscribe((value) => setSetting("chatBot.imageGeneration", value));
 
-export const booruApi = Variable<Api>(getSetting("booru.api"));
-booruApi.subscribe((value) => setSetting("booru.api", value));
-export const booruTags = Variable<string[]>(getSetting("booru.tags"));
-booruTags.subscribe((value) => setSetting("booru.tags", value));
-export const booruLimit = Variable<number>(getSetting("booru.limit"));
-booruLimit.subscribe((value) => setSetting("booru.limit", value));
-export const booruPage = Variable<number>(getSetting("booru.page"));
-booruPage.subscribe((value) => setSetting("booru.page", value));
+
 
 

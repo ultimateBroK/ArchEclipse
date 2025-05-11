@@ -3,8 +3,7 @@ import { readJSONFile, writeJSONFile } from "./json";
 import { globalSettings } from "../variables";
 import { Settings } from "../interfaces/settings.interface";
 import { barWidgetSelectors, leftPanelWidgetSelectors } from "../constants/widget.constants";
-import { booruApis, chatBotApis } from "../constants/api.constants";
-import { WaifuClass } from "../interfaces/waifu.interface";
+import { chatBotApis } from "../constants/api.constants";
 import { dateFormats } from "../constants/date.constants";
 export const settingsPath = "./assets/settings/settings.json";
 
@@ -39,12 +38,7 @@ export const defaultSettings: Settings = {
     orientation: true,
     layout: barWidgetSelectors,
   },
-  waifu: {
-    input_history: "",
-    visibility: true,
-    current: new WaifuClass(),
-    api: booruApis[0],
-  },
+
   rightPanel: {
     exclusivity: true,
     lock: true,
@@ -63,12 +57,7 @@ export const defaultSettings: Settings = {
     api: chatBotApis[0],
     imageGeneration: false,
   },
-  booru: {
-    api: booruApis[0],
-    tags: [],
-    limit: 20,
-    page: 1,
-  },
+
   quickLauncher: {
     apps: [
       { name: "Browser", app_name: "browser", exec: "xdg-open https://google.com", icon: "" },

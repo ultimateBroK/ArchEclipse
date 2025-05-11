@@ -15,17 +15,3 @@ export const chatBotApis: Api[] = [
     description: "Uses Phind Model. Great for developers",
   },
 ];
-
-export const booruApis: Api[] = [
-  {
-    name: "Danbooru",
-    value: "danbooru",
-    idSearchUrl: "https://danbooru.donmai.us/posts/",
-  },
-  {
-    name: "Gelbooru",
-    value: "gelbooru",
-    idSearchUrl: "https://gelbooru.com/index.php?page=post&s=view&id=",
-  },
-]
-

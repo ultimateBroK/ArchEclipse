@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Translate a text to English
+# Translate a text to Vietnamese
 text=$1
 language=$2
 
 if [ -z "$language" ]; then
-    language="en"
+    language="vn"
 fi
 
 result=$(trans -brief "$text" -t "$language")

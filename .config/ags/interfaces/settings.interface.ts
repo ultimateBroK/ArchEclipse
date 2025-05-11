@@ -1,5 +1,4 @@
 import { Api } from "./api.interface"
-import { Waifu } from "./waifu.interface"
 import { WidgetSelector } from "./widgetSelector.interface"
 
 export interface HyprlandSetting
@@ -50,12 +49,7 @@ export interface Settings
         orientation: boolean,
         layout: WidgetSelector[]
     }
-    waifu: {
-        visibility: boolean,
-        input_history: string,
-        current: Waifu,
-        api: Api,
-    }
+
     rightPanel: {
         visibility: boolean,
         exclusivity: boolean,
@@ -67,12 +61,7 @@ export interface Settings
         api: Api,
         imageGeneration: boolean,
     },
-    booru: {
-        api: Api,
-        tags: string[],
-        limit: number,
-        page: number,
-    },
+
     leftPanel: {
         visibility: boolean,
         exclusivity: boolean,
