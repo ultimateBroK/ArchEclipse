@@ -4,8 +4,6 @@ import Mpris from "gi://AstalMpris";
 const mpris = Mpris.get_default();
 import Cava from "gi://AstalCava";
 const cava = Cava.get_default()!;
-import GLib from "gi://GLib";
-import Pango from "gi://Pango";
 
 import { playerToColor } from "../../../utils/color";
 import { lookupIcon, playerToIcon } from "../../../utils/icon";
@@ -20,9 +18,10 @@ import {
 import {
   bind,
   exec,
+  GLib,
   Variable,
-} from "astal";
-import { App, Gtk } from "astal/gtk4";
+} from "../../../../../../../usr/share/astal/gjs";
+import { Gtk } from "astal/gtk3";
 import CustomRevealer from "../../CustomRevealer";
 import { showWindow } from "../../../utils/window";
 import { dateFormats } from "../../../constants/date.constants";
@@ -44,19 +43,14 @@ const BLOCKS_LENGTH = blocks.length;
 const EMPTY_BARS = "".padEnd(12, "\u2581");
 
 function AudioVisualizer() {
-  let revealerWidget: Gtk.Revealer;
-  
   const revealer = (
     <revealer
       revealChild={false}
       transitionDuration={globalTransition}
       transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
-      setup={self => {
-        revealerWidget = self;
-      }}
       child={
         <label
-          cssClasses={["cava"]}
+          className={"cava"}
           onDestroy={() => bars.drop()}
           label={bind(bars)}
         />
@@ -89,7 +83,7 @@ function AudioVisualizer() {
 
       const b = barArray.join("");
       bars.set(b);
-      revealerWidget.set_reveal_child(b !== EMPTY_BARS);
+      revealer.reveal_child = b !== EMPTY_BARS;
 
       pendingUpdate = false;
       return GLib.SOURCE_REMOVE;
@@ -102,86 +96,61 @@ function AudioVisualizer() {
 function Media({ monitorName }: { monitorName: string }) {
   const progress = (player: Mpris.Player) => {
     const playerIcon = bind(player, "entry").as((e) => playerToIcon(e));
-    // Replace circularprogress custom component with a standard box for now
     return (
-      <box
-        cssClasses={["progress"]}
+      <circularprogress
+        className="progress"
+        rounded={true}
+        inverted={false}
+        // startAt={0.25}
+        borderWidth={1}
+        value={bind(player, "position").as((p) =>
+          player.length > 0 ? p / player.length : 0
+        )}
         halign={Gtk.Align.CENTER}
         valign={Gtk.Align.CENTER}
         child={
-          <label cssClasses={["icon"]} label={playerIcon} />
-        }
-      />
+          // <icon className="icon" icon={playerIcon}/>
+          <label className={"icon"} label={playerIcon} />
+        }></circularprogress>
     );
   };
 
   const title = (player: Mpris.Player) => (
     <label
-      cssClasses={["title"]}
+      className="title"
       max_width_chars={20}
-      ellipsize={Pango.EllipsizeMode.END}
+      truncate={true}
       label={bind(player, "title").as((t) => t || "Unknown Track")}></label>
   );
 
   const artist = (player: Mpris.Player) => (
     <label
-      cssClasses={["artist"]}
+      className="artist"
       max_width_chars={20}
-      ellipsize={Pango.EllipsizeMode.END}
+      truncate={true}
       label={bind(player, "artist").as(
         (a) => `[${a}]` || "Unknown Artist"
       )}></label>
   );
 
+  const coverArtToCss = (player: Mpris.Player) =>
+    bind(player, "coverArt").as(
+      (c) =>
+        `
+        background-image: linear-gradient(
+          to right,
+        #000000,
+        rgba(0, 0, 0, 0.5)
+            ),
+            url("${c}");
+        `
+    );
+
   function Player(player: Mpris.Player) {
     return (
       <box
-        cssClasses={["media"]}
-        setup={self => {
-          // Handle entry binding for the class
-          self.connect("realize", () => {
-            const updateEntryClass = () => {
-              const entryVal = player.entry;
-              self.add_css_class(entryVal);
-            };
-            
-            // Initial setup
-            updateEntryClass();
-            
-            // Listen for changes
-            player.connect("notify::entry", updateEntryClass);
-          });
-          
-          // Handle cover art changes using a custom ID-based approach
-          const playerId = player.bus_name;
-          const cssId = `player-${playerId.replace(/\./g, "-")}`;
-          
-          player.connect("notify::cover-art", () => {
-            const coverArt = player.coverArt;
-            if (coverArt) {
-              // Add a unique identifier class to the player box
-              self.add_css_class(cssId);
-              
-              // Create a global CSS rule specific to this player
-              const cssText = `
-                .${cssId} {
-                  background-image: linear-gradient(
-                    to right,
-                    #000000,
-                    rgba(0, 0, 0, 0.5)
-                  ),
-                  url("${coverArt}");
-                }
-              `;
-              
-              // Apply to the application globally via App
-              App.apply_css(cssText);
-              
-            } else {
-              self.remove_css_class(cssId);
-            }
-          });
-        }}
+        className={bind(player, "entry").as((entry) => `media ${entry}`)}
+        css={coverArtToCss(player)}
         spacing={10}>
         {progress(player)}
         {title(player)}
@@ -203,40 +172,32 @@ function Media({ monitorName }: { monitorName: string }) {
       transitionDuration={globalTransition}
       transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
       child={
-        <box
-          cssClasses={["media-event"]}
-          setup={self => {
-            self.connect("button-press-event", () => {
-              hyprland.message_async("dispatch workspace 4", (res) => {});
-              return true;
-            });
-            self.connect("notify::hover", () => {
-              if (self.get_state_flags() & Gtk.StateFlags.PRELIGHT) {
-                showWindow(`media-${monitorName}`);
-              }
-            });
+        <eventbox
+          className="media-event"
+          onClick={() =>
+            hyprland.message_async("dispatch workspace 4", (res) => {})
+          }
+          on_hover={() => {
+            showWindow(`media-${monitorName}`);
           }}
           child={bind(mpris, "players").as((arr) =>
             arr.length > 0 ? activePlayer() : <box />
-          )}
-        />
+          )}></eventbox>
       }></revealer>
   );
 }
 
 function Clock() {
-  const revealer = <label cssClasses={["revealer"]} label={bind(date_more)}></label>;
-  const trigger = <label cssClasses={["trigger"]} label={bind(date_less)}></label>;
+  const revealer = <label className="revealer" label={bind(date_more)}></label>;
+
+  const trigger = <label className="trigger" label={bind(date_less)}></label>;
 
   return (
-    <box
-      setup={self => {
-        self.connect("button-press-event", () => {
-          const currentFormat = dateFormat.get();
-          const currentIndex = dateFormats.indexOf(currentFormat);
-          dateFormat.set(dateFormats[(currentIndex + 1) % dateFormats.length]);
-          return true;
-        });
+    <eventbox
+      onClick={() => {
+        const currentFormat = dateFormat.get();
+        const currentIndex = dateFormats.indexOf(currentFormat);
+        dateFormat.set(dateFormats[(currentIndex + 1) % dateFormats.length]);
       }}
       child={
         <CustomRevealer
@@ -279,7 +240,7 @@ function Bandwidth() {
 
   const totalBandwidth = (
     <label
-      cssClasses={["bandwidth-total"]}
+      className={"bandwidth-total"}
       onDestroy={() => bandwidth.drop()}
       label={bind(bandwidth).as((bandwidth) => {
         return `${formatKiloBytes(bandwidth[2])} | ${formatKiloBytes(
@@ -290,18 +251,18 @@ function Bandwidth() {
   );
 
   const packet = (icon: string, value: string) => (
-    <box cssClasses={["packet"]} spacing={1}>
+    <box className={"packet"} spacing={1}>
       <label label={value} />
-      <label cssClasses={["icon"]} label={icon} />
+      <label className={"icon"} label={icon} />
     </box>
   );
 
   const trigger = (
-    <box cssClasses={["bandwidth"]} spacing={5}>
+    <box className="bandwidth" spacing={5}>
       {bind(bandwidth).as((bandwidth) => {
         return [
-          packet("", String(bandwidth[0])),
-          packet("", String(bandwidth[1])),
+          packet("", String(bandwidth[0])),
+          packet("", String(bandwidth[1])),
         ];
       })}
     </box>
@@ -326,8 +287,8 @@ function ClientTitle() {
         (client) =>
           client && (
             <label
-              cssClasses={["client-title"]}
-              ellipsize={Pango.EllipsizeMode.END}
+              className="client-title"
+              truncate={true}
               max_width_chars={24}
               label={bind(client, "title").as(String)}
             />
@@ -344,7 +305,7 @@ export default ({
   halign: Gtk.Align;
 }) => {
   return (
-    <box cssClasses={["bar-middle"]} spacing={5} halign={halign} hexpand>
+    <box className="bar-middle" spacing={5} halign={halign} hexpand>
       <AudioVisualizer />
       <Media monitorName={monitorName} />
       <Clock />

@@ -9,7 +9,7 @@
         // "checkJs": true,
         // "allowJs": true,
         "jsx": "react-jsx",
-        "jsxImportSource": "/usr/share/astal/gjs/gtk4",
+        "jsxImportSource": "/usr/share/astal/gjs/gtk3",
         "paths": {
             "astal": [
                 "/usr/share/astal/gjs"
@@ -18,10 +18,5 @@
                 "/usr/share/astal/gjs/*"
             ]
         },
-        "skipLibCheck": true
-    },
-    "exclude": [
-        "@girs/gtk-2.0.d.ts",
-        "@girs/gtk-3.0.d.ts"
-    ]
+    }
 }

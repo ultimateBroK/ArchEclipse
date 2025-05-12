@@ -38,7 +38,6 @@ export const defaultSettings: Settings = {
     orientation: true,
     layout: barWidgetSelectors,
   },
-
   rightPanel: {
     exclusivity: true,
     lock: true,
@@ -57,7 +56,6 @@ export const defaultSettings: Settings = {
     api: chatBotApis[0],
     imageGeneration: false,
   },
-
   quickLauncher: {
     apps: [
       { name: "Browser", app_name: "browser", exec: "xdg-open https://google.com", icon: "" },

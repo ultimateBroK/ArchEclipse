@@ -5,7 +5,7 @@ text=$1
 language=$2
 
 if [ -z "$language" ]; then
-    language="vn"
+    language="vi"
 fi
 
 result=$(trans -brief "$text" -t "$language")

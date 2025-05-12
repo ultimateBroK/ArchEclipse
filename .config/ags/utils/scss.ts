@@ -1,7 +1,7 @@
+
 import { execAsync } from "astal"
 import { monitorFile } from "astal/file"
-import { App as Astal3App } from "astal/gtk4"
-import { App } from "./gtk4-compat"
+import { App } from "astal/gtk3"
 import { globalFontSize, globalIconSize, globalOpacity, globalScale } from "../variables"
 import { notify } from "./notification"
 
@@ -32,9 +32,8 @@ export async function refreshCss()
         $SCALE: ${globalScale.get().value}px;
         ' | cat - ${defaultColors} ${walColors} ${scss} > ${tmpScss} && sassc ${tmpScss} ${tmpCss} -I ${scss_dir}"`)
 
-        // Use compatibility layer for CSS
-        App.resetCss();
-        App.applyCss(tmpCss);
+        App.reset_css()
+        App.apply_css(tmpCss)
 
     } catch (e) {
         notify({ summary: `Error while generating css`, body: String(e) })

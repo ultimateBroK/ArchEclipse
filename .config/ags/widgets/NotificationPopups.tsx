@@ -1,4 +1,4 @@
-import { Astal, Gtk, Gdk, App } from "astal/gtk4";
+import { Astal, Gtk, Gdk, App } from "astal/gtk3";
 import Notifd from "gi://AstalNotifd";
 import Notification from "./rightPanel/components/Notification";
 import { type Subscribable } from "astal/binding";

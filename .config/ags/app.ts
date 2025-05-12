@@ -1,5 +1,4 @@
-import { App as Astal3App } from "astal/gtk4"
-import { App } from "./utils/gtk4-compat"
+import { App } from "astal/gtk3"
 import Bar from "./widgets/bar/Bar"
 import { getCssPath } from "./utils/scss"
 import RightPanel from "./widgets/rightPanel/RightPanel"
@@ -18,40 +17,36 @@ import { logTime } from "./utils/time"
 import LeftPanel from "./widgets/leftPanel/LeftPanel"
 import LeftPanelHover from "./widgets/leftPanel/LeftPanelHover"
 import { compileBinaries } from "./utils/gcc"
-import { Gdk } from "astal/gtk4"
 
 
-const perMonitorDisplay = () => {
-    const monitors = App.getMonitors();
-    return monitors.map((monitor: Gdk.Monitor) => {
-        const monitorName = getMonitorName(monitor);
-        print("\t MONITOR: " + monitorName);
+const perMonitorDisplay = () => App.get_monitors().map(monitor =>
+{
+    print("\t MONITOR: " + getMonitorName(monitor.get_display(), monitor));
 
-        // List of widget initializers
-        const widgetInitializers = [
-            { name: "Bar", fn: () => Bar(monitor) },
-            { name: "BarHover", fn: () => BarHover(monitor) },
-            { name: "Progress", fn: () => Progress(monitor) },
-            { name: "RightPanel", fn: () => RightPanel(monitor) },
-            { name: "RightPanelHover", fn: () => RightPanelHover(monitor) },
-            { name: "LeftPanel", fn: () => LeftPanel(monitor) },
-            { name: "LeftPanelHover", fn: () => LeftPanelHover(monitor) },
-            { name: "NotificationPopups", fn: () => NotificationPopups(monitor) },
-            { name: "AppLauncher", fn: () => AppLauncher(monitor) },
-            { name: "UserPanel", fn: () => UserPanel(monitor) },
-            { name: "WallpaperSwitcher", fn: () => WallpaperSwitcher(monitor) },
-            { name: "MediaPopups", fn: () => MediaPopups(monitor) },
-            { name: "SettingsWidget", fn: () => SettingsWidget(monitor) },
-            { name: "OSD", fn: () => OSD(monitor) }
-        ];
+    // List of widget initializers
+    const widgetInitializers = [
+        { name: "Bar", fn: () => Bar(monitor) },
+        { name: "BarHover", fn: () => BarHover(monitor) },
+        { name: "Progress", fn: () => Progress(monitor) },
+        { name: "RightPanel", fn: () => RightPanel(monitor) },
+        { name: "RightPanelHover", fn: () => RightPanelHover(monitor) },
+        { name: "LeftPanel", fn: () => LeftPanel(monitor) },
+        { name: "LeftPanelHover", fn: () => LeftPanelHover(monitor) },
+        { name: "NotificationPopups", fn: () => NotificationPopups(monitor) },
+        { name: "AppLauncher", fn: () => AppLauncher(monitor) },
+        { name: "UserPanel", fn: () => UserPanel(monitor) },
+        { name: "WallpaperSwitcher", fn: () => WallpaperSwitcher(monitor) },
+        { name: "MediaPopups", fn: () => MediaPopups(monitor) },
+        { name: "SettingsWidget", fn: () => SettingsWidget(monitor) },
+        { name: "OSD", fn: () => OSD(monitor) }
+    ];
 
-        // Launch each widget independently without waiting
-        widgetInitializers.forEach(({ name, fn }) =>
-        {
-            logTime(`\t\t ${name}`, fn);
-        });
+    // Launch each widget independently without waiting
+    widgetInitializers.forEach(({ name, fn }) =>
+    {
+        logTime(`\t\t ${name}`, fn);
     });
-};
+});
 
 
 App.start({

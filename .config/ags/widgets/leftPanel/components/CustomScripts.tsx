@@ -1,6 +1,6 @@
 import { execAsync } from "astal";
 import { notify } from "../../../utils/notification";
-import { Gtk } from "astal/gtk4";
+import { Gtk } from "astal/gtk3";
 
 const customScripts = [
   {

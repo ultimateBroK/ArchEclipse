@@ -1,4 +1,4 @@
-import { App, Astal, Gdk, Gtk } from "astal/gtk4";
+import { App, Astal, Gdk, Gtk } from "astal/gtk3";
 import { getMonitorName } from "../../utils/monitor";
 import { bind, Variable } from "astal";
 import {
@@ -16,7 +16,7 @@ import ToggleButton from "../toggleButton";
 import { leftPanelWidgetSelectors } from "../../constants/widget.constants";
 
 const WidgetActions = () => (
-  <box cssClasses={["widget-actions"]} vertical={true} spacing={10}>
+  <box className={"widget-actions"} vertical={true} spacing={10}>
     {leftPanelWidgetSelectors.map((widgetSelector) => (
       <ToggleButton
         state={bind(leftPanelWidget).as((w) => w.name === widgetSelector.name)}
@@ -28,7 +28,7 @@ const WidgetActions = () => (
 );
 
 const Actions = () => (
-  <box cssClasses={["panel-actions"]} vertical={true}>
+  <box className={"panel-actions"} vertical={true}>
     <WidgetActions />
     <WindowActions
       windowWidth={leftPanelWidth}
@@ -44,7 +44,7 @@ function Panel() {
     <box>
       <Actions />
       <box
-        cssClasses={["main-content"]}
+        className={"main-content"}
         widthRequest={bind(leftPanelWidth)}
         child={bind(leftPanelWidget).as(
           (widget) =>
@@ -52,39 +52,25 @@ function Panel() {
               .find((ws) => ws.name === widget.name)
               ?.widget() || <box />
         )}></box>
-      <box
-        setup={self => {
-          self.connect("leave-notify-event", () => {
-            if (!leftPanelLock.get()) leftPanelVisibility.set(false);
-            return true;
-          });
+      <eventbox
+        onHoverLost={() => {
+          if (!leftPanelLock.get()) leftPanelVisibility.set(false);
         }}
-        child={<box css={"min-width:5px"} />}></box>
+        child={<box css={"min-width:5px"} />}></eventbox>
     </box>
   );
 }
 
 export default (monitor: Gdk.Monitor) => {
-  // Create a binding for CSS classes based on exclusivity
-  const panelClasses = bind(leftPanelExclusivity).as(exclusivity => 
-    exclusivity ? ["left-panel", "exclusive"] : ["left-panel", "normal"]
-  );
-  
   return (
     <window
       gdkmonitor={monitor}
-      name={`left-panel-${getMonitorName(monitor)}`}
+      name={`left-panel-${getMonitorName(monitor.get_display(), monitor)}`}
       namespace={"left-panel"}
       application={App}
-      cssClasses={panelClasses.get()}
-      setup={self => {
-        // Update CSS classes when exclusivity changes
-        leftPanelExclusivity.subscribe(exclusivity => {
-          self.set_css_classes(
-            exclusivity ? ["left-panel", "exclusive"] : ["left-panel", "normal"]
-          );
-        });
-      }}
+      className={bind(leftPanelExclusivity).as((exclusivity) =>
+        exclusivity ? "left-panel exclusive" : "left-panel normal"
+      )}
       anchor={
         Astal.WindowAnchor.LEFT |
         Astal.WindowAnchor.TOP |
@@ -115,9 +101,9 @@ export function LeftPanelVisibility() {
       child={
         <ToggleButton
           state={bind(leftPanelVisibility)}
-          label={bind(leftPanelVisibility).as((v) => (v ? "" : ""))}
+          label={bind(leftPanelVisibility).as((v) => (v ? "" : ""))}
           onToggled={(self, on) => leftPanelVisibility.set(on)}
-          cssClass="panel-trigger icon"
+          className="panel-trigger icon"
         />
       }
     />

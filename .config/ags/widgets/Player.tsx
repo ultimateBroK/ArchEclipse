@@ -1,6 +1,6 @@
 import AstalMpris from "gi://AstalMpris?version=0.1";
 import { getDominantColor } from "../utils/image";
-import { Gtk } from "astal/gtk4";
+import { Gtk } from "astal/gtk3";
 import { rightPanelWidth } from "../variables";
 import { bind } from "astal";
 

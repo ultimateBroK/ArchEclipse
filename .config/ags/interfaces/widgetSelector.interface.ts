@@ -1,4 +1,4 @@
-import Gtk from "gi://Gtk?version=4.0";
+import { Gtk } from "astal/gtk3";
 
 
 export interface WidgetSelector

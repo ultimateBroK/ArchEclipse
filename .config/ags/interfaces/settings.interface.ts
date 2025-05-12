@@ -49,7 +49,6 @@ export interface Settings
         orientation: boolean,
         layout: WidgetSelector[]
     }
-
     rightPanel: {
         visibility: boolean,
         exclusivity: boolean,
@@ -61,7 +60,6 @@ export interface Settings
         api: Api,
         imageGeneration: boolean,
     },
-
     leftPanel: {
         visibility: boolean,
         exclusivity: boolean,

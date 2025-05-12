@@ -8,7 +8,7 @@ import {
   formatToURL,
   getDomainFromURL,
 } from "../utils/url";
-import { App, Astal, Gdk, Gtk } from "astal/gtk4";
+import { App, Astal, Gdk, Gtk } from "astal/gtk3";
 import { notify } from "../utils/notification";
 import {
   emptyWorkspace,
@@ -16,8 +16,6 @@ import {
   globalSettings,
   globalTransition,
 } from "../variables";
-
-import { Align } from "../utils/gtk4-compat";
 
 const apps = new Apps.Apps();
 
@@ -214,7 +212,7 @@ const organizeResults = (results: LauncherApp[]) => {
     <box
       spacing={10}
       halign={
-        element.app_type === "emoji" ? Align.CENTER : Align.START
+        element.app_type === "emoji" ? Gtk.Align.CENTER : Gtk.Align.START
       }>
       {element.app_type === "app" ? <icon icon={element.app_icon} /> : <box />}
       <label label={element.app_name} />

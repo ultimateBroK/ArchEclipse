@@ -28,6 +28,3 @@ assets/chatbot/*
 assets/booru/*
 
 logs
-
-/.cursor/
-.gitignore/

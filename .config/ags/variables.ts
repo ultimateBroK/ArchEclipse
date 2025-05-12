@@ -70,7 +70,6 @@ export const barLayout = Variable<WidgetSelector[]>(getSetting("bar.layout"));
 barLayout.subscribe((value) => setSetting("bar.layout", value));
 
 
-
 export const focusedClient: Binding<Hyprland.Client> = bind(hyprland, "focusedClient");
 export const emptyWorkspace: Binding<boolean> = focusedClient.as((client) => !client);
 export const focusedWorkspace: Binding<Hyprland.Workspace> = bind(hyprland, "focusedWorkspace");
@@ -109,7 +108,6 @@ export const chatBotApi = Variable<Api>(getSetting("chatBot.api"));
 chatBotApi.subscribe((value) => setSetting("chatBot.api", value));
 export const chatBotImageGeneration = Variable<boolean>(getSetting("chatBot.imageGeneration"));
 chatBotImageGeneration.subscribe((value) => setSetting("chatBot.imageGeneration", value));
-
 
 
 

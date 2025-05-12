@@ -1,6 +1,6 @@
-import { Box, Label } from "astal/gtk4/widget";
+import { Box, Label } from "astal/gtk3/widget";
 import Player from "./Player";
-import { Astal, Gtk } from "astal/gtk4";
+import { Astal, Gtk } from "astal/gtk3";
 import Mpris from "gi://AstalMpris";
 import { bind } from "astal";
 const mpris = Mpris.get_default();

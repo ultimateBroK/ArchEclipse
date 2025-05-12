@@ -2,8 +2,7 @@ import { bind, exec, execAsync, Variable } from "astal";
 import MediaWidget from "./MediaWidget";
 
 import NotificationHistory from "./rightPanel/NotificationHistory";
-import { App, Astal, Gdk, Gtk, hook } from "astal/gtk4";
-import GLib from 'gi://GLib';
+import { App, Astal, Gdk, Gtk } from "astal/gtk3";
 
 import hyprland from "gi://AstalHyprland";
 import { date_less } from "../variables";
@@ -17,77 +16,55 @@ const pfpPath = exec(`bash -c "echo $HOME/.face.icon"`);
 const username = exec(`whoami`);
 const uptime = Variable("-").poll(600000, "uptime -p");
 
-// Changed to export default
-export default (monitor: Gdk.Monitor) => {
-  const monitorName = getMonitorName(monitor);
-  
+const UserPanel = (monitorName: string) => {
   const Profile = () => {
     const UserName = (
-      <box halign={Gtk.Align.CENTER} cssName="user-name">
+      <box halign={Gtk.Align.CENTER} className="user-name">
         <label label="I'm " />
-        <label cssName="name" label={username} />
+        <label className="name" label={username} />
       </box>
     );
 
     const Uptime = (
       <box
         halign={Gtk.Align.CENTER}
-        cssName="up-time"
-        child={<label cssName="uptime" label={bind(uptime)} />}></box>
+        className="up-time"
+        child={<label className="uptime" label={bind(uptime)} />}></box>
     );
-
-    const pfpVariable = Variable(pfpPath);
 
     const ProfilePicture = (
       <box
-        cssName="profile-picture"
-        setup={(self) => {
-          const cssProvider = new Gtk.CssProvider();
-          self.get_style_context().add_provider(cssProvider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
-
-          const updateCss = (path: string) => {
-            const style = `
-              .profile-picture {
-                background-image: url("${path}");
-                min-height: 100px;
-                min-width: 100px;
-                background-size: cover;
-                background-position: center;
-              }
-            `;
-            cssProvider.load_from_string(style);
-          };
-
-          hook(self, pfpVariable, () => updateCss(pfpVariable.get()));
-          updateCss(pfpVariable.get());
-        }}
-      >
-        <FileChooserButton
-          hexpand
-          vexpand
-          usePreviewLabel={false}
-          fileSet={(self: any) => {
-            let uri = self.get_uri();
-            if (!uri) return;
-            const cleanUri = uri.replace("file://", "");
-            execAsync(`bash -c "cp '${cleanUri}' '${pfpPath}'"`)
-              .then(() => {
-                pfpVariable.set(pfpPath + "?timestamp=" + globalThis.Date.now());
-              })
-              .finally(() => {
-                notify({
-                  summary: "Profile picture",
-                  body: `${cleanUri} set to ${pfpPath}`,
-                });
-              })
-              .catch((err) => notify({ summary: "PFP Error", body: String(err) }));
-          }}
-        />
-      </box>
+        className="profile-picture"
+        css={`
+          background-image: url("${pfpPath}");
+        `}
+        child={
+          <FileChooserButton
+            hexpand
+            vexpand
+            usePreviewLabel={false}
+            onFileSet={(self) => {
+              let uri = self.get_uri();
+              if (!uri) return;
+              const cleanUri = uri.replace("file://", ""); // Remove 'file://' from the URI
+              execAsync(`bash -c "cp '${cleanUri}' ${pfpPath}"`)
+                .then(() => {
+                  ProfilePicture.css = `background-image: url('${pfpPath}');`;
+                })
+                .finally(() => {
+                  notify({
+                    summary: "Profile picture",
+                    body: `${cleanUri} set to ${pfpPath}`,
+                  });
+                })
+                .catch((err) => notify(err));
+            }}
+          />
+        }></box>
     );
 
     return (
-      <box cssName="profile" vertical={true}>
+      <box className="profile" vertical={true}>
         {ProfilePicture}
         {UserName}
         {Uptime}
@@ -99,7 +76,7 @@ export default (monitor: Gdk.Monitor) => {
     const Logout = () => (
       <button
         hexpand={true}
-        cssName="logout"
+        className="logout"
         label="󰍃"
         onClicked={() => {
           Hyprland.message_async("dispatch exit", () => {});
@@ -110,8 +87,8 @@ export default (monitor: Gdk.Monitor) => {
     const Shutdown = () => (
       <button
         hexpand={true}
-        cssName="shutdown"
-        label=""
+        className="shutdown"
+        label=""
         onClicked={() => {
           execAsync(`shutdown now`);
         }}
@@ -121,7 +98,7 @@ export default (monitor: Gdk.Monitor) => {
     const Restart = () => (
       <button
         hexpand={true}
-        cssName="restart"
+        className="restart"
         label="󰜉"
         onClicked={() => {
           execAsync(`reboot`);
@@ -132,7 +109,7 @@ export default (monitor: Gdk.Monitor) => {
     const Sleep = () => (
       <button
         hexpand={true}
-        cssName="sleep"
+        className="sleep"
         label="󰤄"
         onClicked={() => {
           hideWindow(`user-panel-${monitorName}`);
@@ -142,12 +119,12 @@ export default (monitor: Gdk.Monitor) => {
     );
 
     return (
-      <box cssName="system-actions" vertical={true} spacing={10}>
-        <box cssName="action" spacing={10}>
+      <box className="system-actions" vertical={true} spacing={10}>
+        <box className="action" spacing={10}>
           {Shutdown()}
           {Restart()}
         </box>
-        <box cssName="action" spacing={10}>
+        <box className="action" spacing={10}>
           {Sleep()}
           {Logout()}
         </box>
@@ -158,7 +135,7 @@ export default (monitor: Gdk.Monitor) => {
   const right = (
     <box
       halign={Gtk.Align.CENTER}
-      cssName="bottom"
+      className="bottom"
       vertical={true}
       spacing={10}>
       {Profile()}
@@ -168,7 +145,7 @@ export default (monitor: Gdk.Monitor) => {
 
   const Date = (
     <box
-      cssName="date"
+      className="date"
       child={
         <label
           halign={Gtk.Align.CENTER}
@@ -180,48 +157,59 @@ export default (monitor: Gdk.Monitor) => {
 
   const middle = (
     <box
-      cssName="middle"
+      className="middle"
       vertical={true}
       hexpand={true}
       vexpand={true}
       spacing={10}>
+      {/* {Resources()} */}
       {NotificationHistory()}
       {Date}
     </box>
   );
 
-  const WindowActions = (
+  return (
+    <box className="user-panel" spacing={10}>
+      {MediaWidget()}
+      {middle}
+      {right}
+    </box>
+  );
+};
+
+const WindowActions = (monitorName: string) => {
+  return (
     <box
-      cssName="window-actions"
+      className="window-actions"
       hexpand={true}
       halign={Gtk.Align.END}
       child={
         <button
-          cssName="close"
-          label=""
+          className="close"
+          label=""
           onClicked={() => {
             hideWindow(`user-panel-${monitorName}`);
           }}
         />
-      }
-    />
+      }></box>
   );
+};
 
+export default (monitor: Gdk.Monitor) => {
+  const monitorName = getMonitorName(monitor.get_display(), monitor)!;
   return (
     <window
       gdkmonitor={monitor}
       name={`user-panel-${monitorName}`}
       namespace="user-panel"
       application={App}
+      className="user-panel"
+      layer={Astal.Layer.OVERLAY}
       visible={false}
       child={
-        <box cssName="user-panel-container" vertical>
-          {WindowActions}
-          <box cssName="user-panel" spacing={10}>
-            {MediaWidget()}
-            {middle}
-            {right}
-          </box>
+        <box className="display" vertical={true} spacing={10}>
+          {WindowActions(monitorName)}
+          {UserPanel(monitorName)}
         </box>
       }
     />

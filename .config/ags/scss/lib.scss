@@ -41,11 +41,12 @@ button,
     background: $background;
     text-shadow: $foreground 0 0 1px;
   }
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba($secondary, 0.7);
-  }
+  &:focus,
   &:checked {
+    outline: none;
+    // border-color: transparent;
+  }
+  &.checked {
     background: $secondary;
     color: $color0;
   }

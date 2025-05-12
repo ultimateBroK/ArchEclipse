@@ -1,10 +1,11 @@
-import { App, Astal, Gtk, Gdk } from "astal/gtk4";
+import { App, Astal, Gtk, Gdk } from "astal/gtk3";
+import { Window } from "../../../../../../usr/share/astal/gjs/gtk3/widget";
 import { barOrientation, barVisibility } from "../../variables";
 import { bind } from "astal";
 
 export default (monitor: Gdk.Monitor) => {
   return (
-    <window
+    <Window
       name="bar-hover"
       gdkmonitor={monitor}
       anchor={bind(barOrientation).as((orientation) =>
@@ -24,6 +25,6 @@ export default (monitor: Gdk.Monitor) => {
             barVisibility.set(true);
           }}
           child={<box css="min-height: 5px;" />}></eventbox>
-      }></window>
+      }></Window>
   );
-}; 
+};

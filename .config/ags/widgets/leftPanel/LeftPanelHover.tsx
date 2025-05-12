@@ -1,4 +1,4 @@
-import { Astal, Gdk } from "astal/gtk4";
+import { Astal, Gdk } from "astal/gtk3";
 import { leftPanelLock, leftPanelVisibility } from "../../variables";
 
 export default (monitor: Gdk.Monitor) => {

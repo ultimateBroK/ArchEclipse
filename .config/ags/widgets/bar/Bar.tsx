@@ -1,4 +1,4 @@
-import { App, Astal, Gdk, Gtk } from "astal/gtk4";
+import { App, Astal, Gdk, Gtk } from "astal/gtk3";
 import { bind } from "astal";
 import Workspaces from "./components/Workspaces";
 import Information from "./components/Information";
@@ -16,7 +16,7 @@ import { LeftPanelVisibility } from "../leftPanel/LeftPanel";
 import { RightPanelVisibility } from "../rightPanel/RightPanel";
 
 export default (monitor: Gdk.Monitor) => {
-  const monitorName = getMonitorName(monitor)!;
+  const monitorName = getMonitorName(monitor.get_display(), monitor)!;
 
   return (
     <window
@@ -39,7 +39,10 @@ export default (monitor: Gdk.Monitor) => {
       margin={emptyWorkspace.as((empty) => (empty ? globalMargin : 5))}
       visible={bind(barVisibility)}
       child={
-        <box
+        <eventbox
+          onHoverLost={() => {
+            if (!barLock.get()) barVisibility.set(false);
+          }}
           child={
             <box
               spacing={5}
@@ -80,7 +83,7 @@ export default (monitor: Gdk.Monitor) => {
               </centerbox>
               <RightPanelVisibility />
             </box>
-          }></box>
+          }></eventbox>
       }></window>
   );
 };
